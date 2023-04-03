@@ -7,7 +7,7 @@
 Machinery is an asynchronous task queue/job queue based on distributed message passing.
 
 [![Travis Status for wrhb123/machinery](https://travis-ci.org/wrhb123/machinery.svg?branch=master&label=linux+build)](https://travis-ci.org/wrhb123/machinery)
-[![godoc for wrhb123/machinery](https://godoc.org/github.com/nathany/looper?status.svg)](http://godoc.org/github.com/wrhb123/machinery/v2)
+[![godoc for wrhb123/machinery](https://godoc.org/github.com/nathany/looper?status.svg)](http://godoc.org/github.com/wrhb123/machinery)
 [![codecov for wrhb123/machinery](https://codecov.io/gh/wrhb123/machinery/branch/master/graph/badge.svg)](https://codecov.io/gh/wrhb123/machinery)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/wrhb123/machinery)](https://goreportcard.com/report/github.com/wrhb123/machinery)
@@ -67,10 +67,10 @@ Instead of factory, you will need to inject broker and backend objects to the se
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2"
-  backendsiface "github.com/wrhb123/machinery/v2/backends/iface"
-  brokersiface "github.com/wrhb123/machinery/v2/brokers/iface"
-  locksiface "github.com/wrhb123/machinery/v2/locks/iface"
+  "github.com/wrhb123/machinery"
+  backendsiface "github.com/wrhb123/machinery/backends/iface"
+  brokersiface "github.com/wrhb123/machinery/brokers/iface"
+  locksiface "github.com/wrhb123/machinery/locks/iface"
 )
 
 var broker brokersiface.Broker
@@ -85,7 +85,7 @@ server := machinery.NewServer(cnf, broker, backend, lock)
 Add the Machinery library to your $GOPATH/src:
 
 ```sh
-go get github.com/wrhb123/machinery/v2
+go get github.com/wrhb123/machinery
 ```
 
 First, you will need to define some tasks. Look at sample tasks in `example/tasks/tasks.go` to see a few examples.
@@ -386,7 +386,7 @@ type Interface interface {
 }
 ```
 
-Then just set the logger in your setup code by calling `Set` function exported by `github.com/wrhb123/machinery/v2/log` package:
+Then just set the logger in your setup code by calling `Set` function exported by `github.com/wrhb123/machinery/log` package:
 
 ```go
 log.Set(myCustomLogger)
@@ -398,8 +398,8 @@ A Machinery library must be instantiated before use. The way this is done is by 
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/config"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/config"
+  "github.com/wrhb123/machinery"
 )
 
 var cnf = &config.Config{
@@ -626,7 +626,7 @@ Tasks can be called by passing an instance of `Signature` to an `Server` instanc
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
+  "github.com/wrhb123/machinery/tasks"
 )
 
 signature := &tasks.Signature{
@@ -791,8 +791,8 @@ Running a single asynchronous task is fine but often you will want to design a w
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/tasks"
+  "github.com/wrhb123/machinery"
 )
 
 signature1 := tasks.Signature{
@@ -852,8 +852,8 @@ for _, asyncResult := range asyncResults {
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/tasks"
+  "github.com/wrhb123/machinery"
 )
 
 signature1 := tasks.Signature{
@@ -928,8 +928,8 @@ for _, result := range results {
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/tasks"
+  "github.com/wrhb123/machinery"
 )
 
 signature1 := tasks.Signature{
@@ -1014,7 +1014,7 @@ Machinery now supports scheduling periodic tasks and workflows. See examples bel
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
+  "github.com/wrhb123/machinery/tasks"
 )
 
 signature := &tasks.Signature{
@@ -1040,8 +1040,8 @@ if err != nil {
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/tasks"
+  "github.com/wrhb123/machinery"
 )
 
 signature1 := tasks.Signature{
@@ -1083,8 +1083,8 @@ if err != nil {
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/tasks"
+  "github.com/wrhb123/machinery"
 )
 
 signature1 := tasks.Signature{
@@ -1136,8 +1136,8 @@ if err != nil {
 
 ```go
 import (
-  "github.com/wrhb123/machinery/v2/tasks"
-  "github.com/wrhb123/machinery/v2"
+  "github.com/wrhb123/machinery/tasks"
+  "github.com/wrhb123/machinery"
 )
 
 signature1 := tasks.Signature{
