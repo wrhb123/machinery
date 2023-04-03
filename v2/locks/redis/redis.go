@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/RichardKnop/machinery/v2/config"
 	"github.com/go-redis/redis/v8"
+	"github.com/wrhb123/machinery/v2/config"
 )
 
 var (

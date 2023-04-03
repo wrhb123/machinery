@@ -9,8 +9,8 @@ import (
 
 	"cloud.google.com/go/pubsub"
 
-	"github.com/RichardKnop/machinery/v1"
-	"github.com/RichardKnop/machinery/v1/config"
+	"github.com/wrhb123/machinery/v2"
+	"github.com/wrhb123/machinery/v2/config"
 )
 
 func createGCPPubSubTopicAndSubscription(cli *pubsub.Client, topicName, subscriptionName string) {

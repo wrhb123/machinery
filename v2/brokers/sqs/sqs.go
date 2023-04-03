@@ -9,15 +9,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/RichardKnop/machinery/v2/brokers/errs"
-	"github.com/RichardKnop/machinery/v2/brokers/iface"
-	"github.com/RichardKnop/machinery/v2/common"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/log"
-	"github.com/RichardKnop/machinery/v2/tasks"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
+	"github.com/wrhb123/machinery/v2/brokers/errs"
+	"github.com/wrhb123/machinery/v2/brokers/iface"
+	"github.com/wrhb123/machinery/v2/common"
+	"github.com/wrhb123/machinery/v2/config"
+	"github.com/wrhb123/machinery/v2/log"
+	"github.com/wrhb123/machinery/v2/tasks"
 
 	awssqs "github.com/aws/aws-sdk-go/service/sqs"
 )

@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/RichardKnop/machinery/v2/backends/memcache"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/tasks"
 	"github.com/stretchr/testify/assert"
+	"github.com/wrhb123/machinery/v2/backends/memcache"
+	"github.com/wrhb123/machinery/v2/config"
+	"github.com/wrhb123/machinery/v2/tasks"
 )
 
 func TestGroupCompleted(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/RichardKnop/machinery/v1"
-	"github.com/RichardKnop/machinery/v1/config"
+	"github.com/wrhb123/machinery/v2"
+	"github.com/wrhb123/machinery/v2/config"
 )
 
 func TestRedisRedis_Redigo(t *testing.T) {

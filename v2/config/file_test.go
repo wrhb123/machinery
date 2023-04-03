@@ -3,8 +3,8 @@ package config_test
 import (
 	"testing"
 
-	"github.com/RichardKnop/machinery/v2/config"
 	"github.com/stretchr/testify/assert"
+	"github.com/wrhb123/machinery/v2/config"
 )
 
 var configYAMLData = `---

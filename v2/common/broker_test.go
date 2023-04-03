@@ -3,11 +3,11 @@ package common_test
 import (
 	"testing"
 
-	"github.com/RichardKnop/machinery/v2"
-	"github.com/RichardKnop/machinery/v2/common"
-	"github.com/RichardKnop/machinery/v2/config"
-	"github.com/RichardKnop/machinery/v2/tasks"
 	"github.com/stretchr/testify/assert"
+	"github.com/wrhb123/machinery/v2"
+	"github.com/wrhb123/machinery/v2/common"
+	"github.com/wrhb123/machinery/v2/config"
+	"github.com/wrhb123/machinery/v2/tasks"
 )
 
 func TestIsTaskRegistered(t *testing.T) {

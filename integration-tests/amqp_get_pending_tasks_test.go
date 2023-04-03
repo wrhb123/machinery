@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/RichardKnop/machinery/v1"
-	"github.com/RichardKnop/machinery/v1/backends/result"
-	"github.com/RichardKnop/machinery/v1/config"
-	"github.com/RichardKnop/machinery/v1/tasks"
+	"github.com/wrhb123/machinery/v2"
+	"github.com/wrhb123/machinery/v2/backends/result"
+	"github.com/wrhb123/machinery/v2/config"
+	"github.com/wrhb123/machinery/v2/tasks"
 )
 
 func TestAmqpGetPendingTasks(t *testing.T) {

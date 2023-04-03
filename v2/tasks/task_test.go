@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/RichardKnop/machinery/v2/tasks"
 	"github.com/stretchr/testify/assert"
+	"github.com/wrhb123/machinery/v2/tasks"
 )
 
 func TestTaskCallErrorTest(t *testing.T) {
