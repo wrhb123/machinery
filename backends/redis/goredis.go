@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -22,14 +23,13 @@ import (
 // BackendGR represents a Redis result backend
 type BackendGR struct {
 	common.Backend
-	rclient  redis.UniversalClient
-	host     string
-	password string
-	db       int
-	// If set, path to a socket file overrides hostname
-	socketPath string
-	redsync    *redsync.Redsync
-	redisOnce  sync.Once
+	rclient   redis.UniversalClient
+	host      string
+	username  string
+	password  string
+	db        int
+	redsync   *redsync.Redsync
+	redisOnce sync.Once
 }
 
 // NewGR creates Backend instance
@@ -37,18 +37,25 @@ func NewGR(cnf *config.Config, addrs []string, db int) iface.Backend {
 	b := &BackendGR{
 		Backend: common.NewBackend(cnf),
 	}
-	parts := strings.Split(addrs[0], "@")
-	if len(parts) >= 2 {
-		// with passwrod
-		b.password = strings.Join(parts[:len(parts)-1], "@")
-		addrs[0] = parts[len(parts)-1] // addr is the last one without @
+	// 包含username:password:host:port
+	newAddrs := make([]string, len(addrs))
+	parts := strings.Split(addrs[0], ":")
+	b.username, b.password = parts[0], parts[1]
+	for index, addr := range addrs {
+		newAddrs[index] = fmt.Sprintf("%v:%v", strings.Split(addr, ":")[2], strings.Split(addr, ":")[3])
 	}
 
 	ropt := &redis.UniversalOptions{
-		Addrs:    addrs,
-		DB:       db,
-		Password: b.password,
+		Addrs: newAddrs,
+		// DB:           db,
+		Username:     b.username,
+		Password:     b.password,
+		PoolSize:     15,
+		ReadTimeout:  time.Duration(cnf.Redis.ReadTimeout) * time.Second,
+		WriteTimeout: time.Duration(cnf.Redis.WriteTimeout) * time.Second,
+		DialTimeout:  time.Duration(cnf.Redis.ConnectTimeout) * time.Second,
 	}
+
 	if cnf.Redis != nil {
 		ropt.MasterName = cnf.Redis.MasterName
 	}

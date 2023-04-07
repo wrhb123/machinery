@@ -22,15 +22,15 @@ import (
 	"github.com/wrhb123/machinery/tasks"
 )
 
+const defaultRedisDelayedTasksKey = "delayed_tasks"
+
 // BrokerGR represents a Redis broker
 type BrokerGR struct {
 	common.Broker
-	rclient      redis.UniversalClient
-	consumingWG  sync.WaitGroup // wait group to make sure whole consumption completes
-	processingWG sync.WaitGroup // use wait group to make sure task processing completes
-	delayedWG    sync.WaitGroup
-	// If set, path to a socket file overrides hostname
-	socketPath           string
+	rclient              redis.UniversalClient
+	consumingWG          sync.WaitGroup // wait group to make sure whole consumption completes
+	processingWG         sync.WaitGroup // use wait group to make sure task processing completes
+	delayedWG            sync.WaitGroup
 	redsync              *redsync.Redsync
 	redisOnce            sync.Once
 	redisDelayedTasksKey string
@@ -40,18 +40,23 @@ type BrokerGR struct {
 func NewGR(cnf *config.Config, addrs []string, db int) iface.Broker {
 	b := &BrokerGR{Broker: common.NewBroker(cnf)}
 
-	var password string
-	parts := strings.Split(addrs[0], "@")
-	if len(parts) >= 2 {
-		// with password
-		password = strings.Join(parts[:len(parts)-1], "@")
-		addrs[0] = parts[len(parts)-1] // addr is the last one without @
+	// 包含username:password:host:port
+	newAddrs := make([]string, len(addrs))
+	parts := strings.Split(addrs[0], ":")
+	username, password := parts[0], parts[1]
+	for index, addr := range addrs {
+		newAddrs[index] = fmt.Sprintf("%v:%v", strings.Split(addr, ":")[2], strings.Split(addr, ":")[3])
 	}
 
 	ropt := &redis.UniversalOptions{
-		Addrs:    addrs,
-		DB:       db,
-		Password: password,
+		Addrs: newAddrs,
+		// DB:           db,
+		Username:     username,
+		Password:     password,
+		PoolSize:     15,
+		ReadTimeout:  time.Duration(cnf.Redis.ReadTimeout) * time.Second,
+		WriteTimeout: time.Duration(cnf.Redis.WriteTimeout) * time.Second,
+		DialTimeout:  time.Duration(cnf.Redis.ConnectTimeout) * time.Second,
 	}
 	if cnf.Redis != nil {
 		ropt.MasterName = cnf.Redis.MasterName

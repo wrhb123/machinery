@@ -1,12 +1,16 @@
 package redis_test
 
 import (
+	"context"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/wrhb123/machinery/backends/iface"
 
+	redislib "github.com/go-redis/redis/v8"
 	"github.com/stretchr/testify/assert"
 	"github.com/wrhb123/machinery/backends/redis"
 	"github.com/wrhb123/machinery/config"
@@ -159,4 +163,23 @@ func TestPurgeStateGR(t *testing.T) {
 	taskState, err = backend.GetState(signature.UUID)
 	assert.Nil(t, taskState)
 	assert.Error(t, err)
+}
+
+func TestRpush(t *testing.T) {
+	redisAddr := "r-uf65egew9whkeryiqxpi.redis.rds.aliyuncs.com:6379"
+
+	rclient := redislib.NewUniversalClient(&redislib.UniversalOptions{
+		Addrs:        []string{redisAddr, redisAddr},
+		Username:     "lb",
+		Password:     "lb@123456",
+		PoolSize:     15,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		DialTimeout:  5 * time.Second,
+	})
+	//a := rclient.RPush(context.Background(), "mmmt", "task-xxx-yyy-zzz")
+	//fmt.Println(a.Result())
+	//rclient.Set(context.Background(), "aaa", "bbb", -1)
+	mmmt := rclient.LRange(context.Background(), "mmmt", 0, -1)
+	fmt.Println(mmmt.Result())
 }

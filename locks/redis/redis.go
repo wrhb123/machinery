@@ -1,7 +1,9 @@
 package redis
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -26,17 +28,18 @@ func New(cnf *config.Config, addrs []string, db, retries int) Lock {
 	}
 	lock := Lock{retries: retries}
 
-	var password string
-
-	parts := strings.Split(addrs[0], "@")
-	if len(parts) >= 2 {
-		password = strings.Join(parts[:len(parts)-1], "@")
-		addrs[0] = parts[len(parts)-1] // addr is the last one without @
+	// 包含username:password:host:port
+	newAddrs := make([]string, len(addrs))
+	parts := strings.Split(addrs[0], ":")
+	username, password := parts[0], parts[1]
+	for index, addr := range addrs {
+		newAddrs[index] = fmt.Sprintf("%v:%v", strings.Split(addr, ":")[2], strings.Split(addr, ":")[3])
 	}
 
 	ropt := &redis.UniversalOptions{
-		Addrs:    addrs,
+		Addrs:    newAddrs,
 		DB:       db,
+		Username: username,
 		Password: password,
 	}
 	if cnf.Redis != nil {
@@ -64,7 +67,7 @@ func (r Lock) LockWithRetries(key string, unixTsToExpireNs int64) error {
 func (r Lock) Lock(key string, unixTsToExpireNs int64) error {
 	now := time.Now().UnixNano()
 	expiration := time.Duration(unixTsToExpireNs + 1 - now)
-	ctx := r.rclient.Context()
+	ctx := context.TODO()
 
 	success, err := r.rclient.SetNX(ctx, key, unixTsToExpireNs, expiration).Result()
 	if err != nil {
