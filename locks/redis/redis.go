@@ -3,9 +3,7 @@ package redis
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -22,22 +20,14 @@ type Lock struct {
 	interval time.Duration
 }
 
-func New(cnf *config.Config, addrs []string, db, retries int) Lock {
+func New(cnf *config.Config, addrs []string, username, password string, db, retries int) Lock {
 	if retries <= 0 {
 		return Lock{}
 	}
 	lock := Lock{retries: retries}
 
-	// 包含username:password:host:port
-	newAddrs := make([]string, len(addrs))
-	parts := strings.Split(addrs[0], ":")
-	username, password := parts[0], parts[1]
-	for index, addr := range addrs {
-		newAddrs[index] = fmt.Sprintf("%v:%v", strings.Split(addr, ":")[2], strings.Split(addr, ":")[3])
-	}
-
 	ropt := &redis.UniversalOptions{
-		Addrs:    newAddrs,
+		Addrs:    addrs,
 		DB:       db,
 		Username: username,
 		Password: password,

@@ -13,6 +13,8 @@ import (
 
 func TestRedisRedis_GoRedis(t *testing.T) {
 	redisURL := os.Getenv("REDIS_URL")
+	redisUser := os.Getenv("REDIS_USER")
+	redisPassword := os.Getenv("REDIS_PASSWORD")
 	if redisURL == "" {
 		t.Skip("REDIS_URL is not defined")
 	}
@@ -31,8 +33,8 @@ func TestRedisRedis_GoRedis(t *testing.T) {
 		},
 	}
 
-	broker := redisbroker.NewGR(cnf, []string{redisURL}, 0)
-	backend := redisbackend.NewGR(cnf, []string{redisURL}, 0)
+	broker := redisbroker.NewGR(cnf, []string{redisURL}, redisUser, redisPassword, 0)
+	backend := redisbackend.NewGR(cnf, []string{redisURL}, redisUser, redisPassword, 0)
 	lock := eagerlock.New()
 	server := machinery.NewServer(cnf, broker, backend, lock)
 

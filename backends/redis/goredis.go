@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"strings"
 	"sync"
 	"time"
 
@@ -33,21 +31,17 @@ type BackendGR struct {
 }
 
 // NewGR creates Backend instance
-func NewGR(cnf *config.Config, addrs []string, db int) iface.Backend {
+func NewGR(cnf *config.Config, addrs []string, username, password string, db int) iface.Backend {
 	b := &BackendGR{
 		Backend: common.NewBackend(cnf),
 	}
-	// 包含username:password:host:port
-	newAddrs := make([]string, len(addrs))
-	parts := strings.Split(addrs[0], ":")
-	b.username, b.password = parts[0], parts[1]
-	for index, addr := range addrs {
-		newAddrs[index] = fmt.Sprintf("%v:%v", strings.Split(addr, ":")[2], strings.Split(addr, ":")[3])
-	}
+
+	b.username = username
+	b.password = password
 
 	ropt := &redis.UniversalOptions{
-		Addrs: newAddrs,
-		// DB:           db,
+		Addrs:        addrs,
+		DB:           db,
 		Username:     b.username,
 		Password:     b.password,
 		PoolSize:     15,

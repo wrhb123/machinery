@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
 	"testing"
 	"time"
 
@@ -20,11 +19,12 @@ import (
 func getRedisG() iface.Backend {
 	// host1:port1,host2:port2
 	redisURL := os.Getenv("REDIS_URL_GR")
-	//redisPassword := os.Getenv("REDIS_PASSWORD")
+	redisUser := os.Getenv("REDIS_USER")
+	redisPassword := os.Getenv("REDIS_PASSWORD")
 	if redisURL == "" {
 		return nil
 	}
-	backend := redis.NewGR(new(config.Config), strings.Split(redisURL, ","), 0)
+	backend := redis.NewGR(new(config.Config), []string{redisURL, redisURL}, redisUser, redisPassword, 0)
 	return backend
 }
 

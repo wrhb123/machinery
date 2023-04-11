@@ -37,20 +37,12 @@ type BrokerGR struct {
 }
 
 // NewGR creates new Broker instance
-func NewGR(cnf *config.Config, addrs []string, db int) iface.Broker {
+func NewGR(cnf *config.Config, addrs []string, username, password string, db int) iface.Broker {
 	b := &BrokerGR{Broker: common.NewBroker(cnf)}
 
-	// 包含username:password:host:port
-	newAddrs := make([]string, len(addrs))
-	parts := strings.Split(addrs[0], ":")
-	username, password := parts[0], parts[1]
-	for index, addr := range addrs {
-		newAddrs[index] = fmt.Sprintf("%v:%v", strings.Split(addr, ":")[2], strings.Split(addr, ":")[3])
-	}
-
 	ropt := &redis.UniversalOptions{
-		Addrs: newAddrs,
-		// DB:           db,
+		Addrs:        addrs,
+		DB:           db,
 		Username:     username,
 		Password:     password,
 		PoolSize:     15,
